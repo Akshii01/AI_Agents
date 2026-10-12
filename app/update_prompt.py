@@ -3,7 +3,9 @@ import sqlite3
 from pathlib import Path
 
 project_dir = Path(__file__).resolve().parent.parent
-prompt = (project_dir / "prompt.txt").read_text(encoding="utf-8").strip()
+prompt = (project_dir / "app" / "prompts" / "story.txt").read_text(
+    encoding="utf-8"
+).strip()
 database = Path(
     os.getenv("PROMPT_DATABASE_PATH", str(project_dir / "data" / "prompts.db"))
 )

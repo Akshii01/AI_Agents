@@ -1,15 +1,18 @@
-import os
 import sqlite3
 from pathlib import Path
 
+from app.storage.database import get_database_path
+
 PROMPT_KEY = "Story Summarizer"
-PROMPT_FILE = Path(__file__).resolve().parent.parent / "prompt.txt"
+PROMPT_DIRECTORY = Path(__file__).resolve().parent.parent / "prompts"
+PROMPT_FILE = PROMPT_DIRECTORY / "story.txt"
 DEFAULT_PROMPT = PROMPT_FILE.read_text(encoding="utf-8").strip()
-
-
-def get_database_path() -> Path:
-    default_path = Path(__file__).resolve().parent.parent / "data" / "prompts.db"
-    return Path(os.getenv("PROMPT_DATABASE_PATH", str(default_path)))
+RECIPE_PROMPT_KEY = "Recipe Chatbot"
+RECIPE_PROMPT_FILE = PROMPT_DIRECTORY / "recipe.txt"
+DEFAULT_RECIPE_PROMPT = RECIPE_PROMPT_FILE.read_text(encoding="utf-8").strip()
+GENERAL_PROMPT_KEY = "General Chatbot"
+GENERAL_PROMPT_FILE = PROMPT_DIRECTORY / "general.txt"
+DEFAULT_GENERAL_PROMPT = GENERAL_PROMPT_FILE.read_text(encoding="utf-8").strip()
 
 
 def initialize_prompt_store() -> None:
@@ -27,6 +30,14 @@ def initialize_prompt_store() -> None:
         connection.execute(
             "INSERT OR IGNORE INTO prompts (key, prompt) VALUES (?, ?)",
             (PROMPT_KEY, DEFAULT_PROMPT),
+        )
+        connection.execute(
+            "INSERT OR IGNORE INTO prompts (key, prompt) VALUES (?, ?)",
+            (RECIPE_PROMPT_KEY, DEFAULT_RECIPE_PROMPT),
+        )
+        connection.execute(
+            "INSERT OR IGNORE INTO prompts (key, prompt) VALUES (?, ?)",
+            (GENERAL_PROMPT_KEY, DEFAULT_GENERAL_PROMPT),
         )
 
 
